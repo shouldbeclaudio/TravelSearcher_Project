@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Travel Searcher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 450px;
+            margin: 0 auto;
+        }
+        
+        .top-bar {
+            display: flex;
+            margin-bottom: 10px;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #000;
+            color: #fff;
+            padding: 10px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo img {
+            max-width: 500px;
+        }
+        
+        .top-bar .menu-toggle {
+            display: none;
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+        }
+        
+        .top-bar .menu-toggle:hover {
+            color: #ccc;
+        }
+        
+        .top-bar .menu {
+            display: flex;
+            align-items: center;
+        }
+        
+        .top-bar .menu a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+        
+        .top-bar .menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+        
+        .top-bar .menu ul li {
+            margin-left: 10px;
+        }
+        
+        .top-bar .menu ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        .top-bar .menu ul li a:hover {
+            color: #333;
+        }
+        
+        .top-bar .menu-items {
+            display: none;
+        }
+        
+        .top-bar .menu-items.active {
+            display: block;
+        }
+        
+        h1 {
+            text-align: center;
+        }
+        
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 10px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        input[type="text"],
+        input[type="date"],
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        input[type="submit"] {
+            grid-column: 1 / span 2;
+            background-color: #000;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #333;
+        }
+        
+        @media screen and (max-width: 600px) {
+            .top-bar .menu {
+                display: none;
+            }
+            
+            .top-bar .menu-toggle {
+                display: block;
+            }
+            
+            .top-bar .menu-items {
+                position: absolute;
+                top: 40px;
+                right: 0;
+                background-color: #333;
+                color: #fff;
+                padding: 10px;
+                border-radius: 4px;
+            }
+            
+            .top-bar .menu-items.active {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <img src="/static/logoimage.jpg" alt="Logo">
+    </div>
+    <div class="container">
+        <div class="top-bar">
+            <div class="menu">
+                <ul>
+                    <li><a href="#"></a></li>
+                </ul>
+            </div>
+            <div class="menu-toggle">&#9776;</div>
+            <div class="menu-items">
+                <ul>
+                    <li><a href="#">About</a></li>
+                </ul>
+            </div>
+        </div>
+    <form action="/search" method="POST">
+        <label for="origin">From:</label>
+        <input type="text" id="origin" name="origin" required>
+
+        <label for="destination">To:</label>
+        <input type="text" id="destination" name="destination" required>
+
+        <label for="departure_date">Departure:</label>
+        <input type="date" id="departure_date" name="departure_date" required>
+
+        <label for="return_date">Return:</label>
+        <input type="date" id="return_date" name="return_date" required>
+
+        <label for="adults">Number of Adults:</label>
+        <input type="number" id="adults" name="adults" required>
+
+        <label for="min_price">Minimum Price:</label>
+        <input type="number" id="min_price" name="min_price">
+
+        <label for="max_price">Maximum Price:</label>
+        <input type="number" id="max_price" name="max_price">
+
+        <input type="submit" value="Search">
+    </form>
+    <div class="skyscanner-logo">
+        <h5>In Association with:<h5>
+        <img src="/static/skyscanner.png" alt="skyscanner">
+    </div>
+    <script>
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.menu-items').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+

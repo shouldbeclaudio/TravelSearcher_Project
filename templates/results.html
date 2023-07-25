@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #000;
+            color: #fff;
+            padding: 10px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        
+        .top-bar .menu-toggle {
+            display: none;
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+        }
+        
+        .top-bar .menu-toggle:hover {
+            color: #ccc;
+        }
+        
+        .top-bar .menu {
+            display: flex;
+            align-items: center;
+        }
+        
+        .top-bar .menu a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+        
+        .top-bar .menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+        
+        .top-bar .menu ul li {
+            margin-left: 10px;
+        }
+        
+        .top-bar .menu ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        .top-bar .menu ul li a:hover {
+            color: #ccc;
+        }
+        
+        .top-bar .menu-items {
+            display: none;
+        }
+        
+        .top-bar .menu-items.active {
+            display: block;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .empty-results {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+.return-button {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.return-link {
+    grid-column: 1 / span 2;
+    background-color: #000;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.return-link:hover {
+    background-color: #333;
+}
+
+.result-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.result-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.table-container {
+    flex: 1;
+    margin-right: 20px;
+    min-width: 300px;
+}
+
+.histogram-container {
+    flex: 1;
+    flex-grow: 1;
+    max-height: 300px;
+    height: auto;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.sort-options {
+    background-color: #f2f2f2;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.sort-options select {
+    border-radius: 10px;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="menu">
+            <ul>
+                <li><a href="#"></a></li>
+            </ul>
+        </div>
+        <div class="menu-toggle">&#9776;</div>
+        <div class="menu-items">
+            <ul>
+                <li><a href="#">About</a></li>
+            </ul>
+        </div>
+    </div>
+    <h1>Flight Search</h1>
+    <div class="sort-options">
+        <label for="flight-sort">Sort by:</label>
+        <select id="flight-sort">
+            <option value="price-low-high">Price: Low to High</option>
+            <option value="price-high-low">Price: High to Low</option>
+        </select>
+    </div>
+    {% if not flight_data.empty %}
+    <div class="table-container">
+        <table id="flight-table">
+            <thead>
+                <tr>
+                    <th>Outbound Date</th>
+                    <th>Outbound Origin</th>
+                    <th>Outbound Destination</th>
+                    <th>Inbound Date</th>
+                    <th>Inbound Origin</th>
+                    <th>Inbound Destination</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for _, row in flight_data.iterrows() %}
+                <tr>
+                    <td>{{ row['Outbound Date'] }}</td>
+                    <td>{{ row['Outbound Origin'] }}</td>
+                    <td>{{ row['Outbound Destination'] }}</td>
+                    <td>{{ row['Inbound Date'] }}</td>
+                    <td>{{ row['Inbound Origin'] }}</td>
+                    <td>{{ row['Inbound Destination'] }}</td>
+                    <td>{{ row['Price'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="empty-results">Sorry, the budget you require is not enough!</p>
+    {% endif %}
+    <h1>Hotel Search</h1>
+    <div class="sort-options">
+        <label for="hotel-sort">Sort by:</label>
+        <select id="hotel-sort">
+            <option value="price-low-high">Price: Low to High</option>
+            <option value="price-high-low">Price: High to Low</option>
+        </select>
+    </div>
+    {% if not hotel_data.empty %}
+    <div class="table-container">
+        <table id="hotel-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Number of Stars</th>
+                    <th>Number of Rooms</th>
+                    <th>Number of People</th>
+                    <th>Price per Night</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, row in hotel_data.iterrows() %}
+                <tr>
+                    <td>{{ row['name'] }}</td>
+                    <td>{{ row['numberOfStars'] }}</td>
+                    <td>{{ row['num_rooms'] }}</td>
+                    <td>{{ row['num_people'] }}</td>
+                    <td>{{ row['Price per Night'] }}</td>
+                    <td>{{ row['Total Price'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="empty-results">Sorry, the budget you require is not enough!</p>
+    {% endif %}    
+    {% if not cheapest_flight.empty and not cheapest_hotel.empty %}
+    <h2>Cheapest Flight + Hotel Combination</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Outbound Date</th>
+                <th>Outbound Origin</th>
+                <th>Outbound Destination</th>
+                <th>Inbound Date</th>
+                <th>Inbound Origin</th>
+                <th>Inbound Destination</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ cheapest_flight['Outbound Date'].iloc[0] }}</td>
+                <td>{{ cheapest_flight['Outbound Origin'].iloc[0] }}</td>
+                <td>{{ cheapest_flight['Outbound Destination'].iloc[0] }}</td>
+                <td>{{ cheapest_flight['Inbound Date'].iloc[0] }}</td>
+                <td>{{ cheapest_flight['Inbound Origin'].iloc[0] }}</td>
+                <td>{{ cheapest_flight['Inbound Destination'].iloc[0] }}</td>
+                <td>{{ cheapest_flight['Price'].iloc[0] }}</td>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Number of Stars</th>
+                    <th>Number of Rooms</th>
+                    <th>Number of People</th>
+                    <th>Price per Night</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ cheapest_hotel['name'].iloc[0] }}</td>
+                    <td>{{ cheapest_hotel['numberOfStars'].iloc[0] }}</td>
+                    <td>{{ cheapest_hotel['num_rooms'].iloc[0] }}</td>
+                    <td>{{ cheapest_hotel['num_people'].iloc[0] }}</td>
+                    <td>{{ cheapest_hotel['price'].iloc[0] }}</td>
+                    <td>{{ cheapest_hotel['price'].iloc[0] * num_of_stays }}</td>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div style="display: flex;">
+        <div style="flex: 1;">
+            <div class="histogram-container">
+                <canvas id="flight-prices-chart"></canvas>
+            </div>
+        </div>
+        <div style="flex: 1;">
+            <div class="histogram-container">
+                <canvas id="hotel-prices-chart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% if not medium_flight.empty and not medium_priced_hotel.empty %}
+<h2>Medium-Priced Flight + Hotel Combination</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Outbound Date</th>
+            <th>Outbound Origin</th>
+            <th>Outbound Destination</th>
+            <th>Inbound Date</th>
+            <th>Inbound Origin</th>
+            <th>Inbound Destination</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ medium_flight['Outbound Date'].iloc[0] }}</td>
+            <td>{{ medium_flight['Outbound Origin'].iloc[0] }}</td>
+            <td>{{ medium_flight['Outbound Destination'].iloc[0] }}</td>
+            <td>{{ medium_flight['Inbound Date'].iloc[0] }}</td>
+            <td>{{ medium_flight['Inbound Origin'].iloc[0] }}</td>
+            <td>{{ medium_flight['Inbound Destination'].iloc[0] }}</td>
+            <td>{{ medium_flight['Price'].iloc[0] }}</td>
+        </tr>
+    </tbody>
+</table>
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Number of Stars</th>
+                <th>Number of Rooms</th>
+                <th>Number of People</th>
+                <th>Price per Night</th>
+                <th>Total Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ medium_priced_hotel['name'].iloc[0] }}</td>
+                <td>{{ medium_priced_hotel['numberOfStars'].iloc[0] }}</td>
+                <td>{{ medium_priced_hotel['num_rooms'].iloc[0] }}</td>
+                <td>{{ medium_priced_hotel['num_people'].iloc[0] }}</td>
+                <td>{{ medium_priced_hotel['price'].iloc[0] }}</td>
+                <td>{{ medium_priced_hotel['price'].iloc[0] * num_of_stays }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div style="display: flex;">
+    <div style="flex: 1;">
+        <div class="histogram-container">
+            <canvas id="medium-flight-prices-chart"></canvas>
+        </div>
+    </div>
+    <div style="flex: 1;">
+        <div class="histogram-container">
+            <canvas id="medium-hotel-prices-chart"></canvas>
+        </div>
+    </div>
+</div>
+</div>
+{% endif %}
+    {% if not expensive_flight.empty and not most_expensive_hotel.empty %}
+    <h2>Expensive Flight + Hotel Combination</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Outbound Date</th>
+                <th>Outbound Origin</th>
+                <th>Outbound Destination</th>
+                <th>Inbound Date</th>
+                <th>Inbound Origin</th>
+                <th>Inbound Destination</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ expensive_flight['Outbound Date'].iloc[0] }}</td>
+                <td>{{ expensive_flight['Outbound Origin'].iloc[0] }}</td>
+                <td>{{ expensive_flight['Outbound Destination'].iloc[0] }}</td>
+                <td>{{ expensive_flight['Inbound Date'].iloc[0] }}</td>
+                <td>{{ expensive_flight['Inbound Origin'].iloc[0] }}</td>
+                <td>{{ expensive_flight['Inbound Destination'].iloc[0] }}</td>
+                <td>{{ expensive_flight['Price'].iloc[0] }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Number of Stars</th>
+                    <th>Number of Rooms</th>
+                    <th>Number of People</th>
+                    <th>Price per Night</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ most_expensive_hotel['name'].iloc[0] }}</td>
+                    <td>{{ most_expensive_hotel['numberOfStars'].iloc[0] }}</td>
+                    <td>{{ most_expensive_hotel['num_rooms'].iloc[0] }}</td>
+                    <td>{{ most_expensive_hotel['num_people'].iloc[0] }}</td>
+                    <td>{{ most_expensive_hotel['price'].iloc[0]}}</td>
+                    <td>{{ most_expensive_hotel['price'].iloc[0] * num_of_stays }}</td>
+                    
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div style="display: flex;">
+        <div style="flex: 1;">
+            <div class="histogram-container">
+                <canvas id="expensive-flight-prices-chart"></canvas>
+            </div>
+        </div>
+        <div style="flex: 1;">
+            <div class="histogram-container">
+                <canvas id="expensive-hotel-prices-chart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+    <div class="return-button">
+        <a href="/" class="return-link">Return to Search</a>
+    </div>
+    <script>
+        function sortFlightTable() {
+            const flightTable = document.getElementById('flight-table');
+            const sortOption = document.getElementById('flight-sort').value;
+            const rows = Array.from(flightTable.getElementsByTagName('tr')).slice(1);
+            rows.sort((a, b) => {
+                const aPrice = parseFloat(a.getElementsByTagName('td')[6].innerText);
+                const bPrice = parseFloat(b.getElementsByTagName('td')[6].innerText);
+                if (sortOption === 'price-low-high') {
+                    return aPrice - bPrice;
+                } else {
+                    return bPrice - aPrice;
+                }
+            });
+            rows.forEach(row => flightTable.appendChild(row));
+        }
+
+        function sortHotelTable() {
+            const hotelTable = document.getElementById('hotel-table');
+            const sortOption = document.getElementById('hotel-sort').value;
+            const rows = Array.from(hotelTable.getElementsByTagName('tr')).slice(1);
+            rows.sort((a, b) => {
+                const aPrice = parseFloat(a.getElementsByTagName('td')[4].innerText);
+                const bPrice = parseFloat(b.getElementsByTagName('td')[4].innerText);
+                if (sortOption === 'price-low-high') {
+                    return aPrice - bPrice;
+                } else {
+                    return bPrice - aPrice;
+                }
+            });
+            rows.forEach(row => hotelTable.appendChild(row));
+        }
+
+        document.getElementById('flight-sort').addEventListener('change', sortFlightTable);
+        document.getElementById('hotel-sort').addEventListener('change', sortHotelTable);
+    </script>
+    <script>
+
+         // Function to Generate Flights Histograms
+
+         function generateFlightPriceHistogram(data, chartId, chosenPrice) {
+            const bucketSize = 80;
+            const minPrice = Math.min(...data.map(item => item.Price));
+            const maxPrice = Math.max(...data.map(item => item.Price));
+            const bucketCounts = new Array(Math.ceil((maxPrice - minPrice) / bucketSize)).fill(0);
+        
+            data.forEach(item => {
+                const bucketIndex = Math.floor((item.Price - minPrice) / bucketSize);
+                bucketCounts[bucketIndex]++;
+            });
+        
+            const labels = bucketCounts.map((count, index) => {
+                const bucketStart = minPrice + index * bucketSize;
+                const bucketEnd = bucketStart + bucketSize;
+                return `${bucketStart.toFixed(0)} - ${bucketEnd.toFixed(0)}`;
+            });
+        
+            const ctx = document.getElementById(chartId).getContext('2d');
+        
+            let chosenBucketIndex = Math.floor((chosenPrice - minPrice) / bucketSize);
+            if (chosenBucketIndex < 0) {
+                chosenBucketIndex = 0;
+            } else if (chosenBucketIndex >= bucketCounts.length) {
+                chosenBucketIndex = bucketCounts.length - 1;
+            }
+        
+            const adjustedChosenPrice = minPrice + (chosenBucketIndex * bucketSize) + bucketSize / 2;
+        
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Price',
+                        data: bucketCounts,
+                        backgroundColor: bucketCounts.map((count, index) => {
+                            const bucketStart = minPrice + index * bucketSize;
+                            const bucketEnd = bucketStart + bucketSize;
+                            if (chosenPrice >= bucketStart && chosenPrice <= bucketEnd) {
+                                return 'rgba(255, 0, 0, 0.7)';
+                            } else {
+                                return 'rgba(0, 0, 0, 0.7)';
+                            }
+                        }),
+                        borderColor: 'black',
+                        borderWidth: 1,
+                    }],
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: Math.max(...bucketCounts) * 1.1,
+                        },
+                    },
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        annotation: {
+                            annotations: [{
+                                type: 'line',
+                                mode: 'horizontal',
+                                scaleID: 'y',
+                                value: adjustedChosenPrice,
+                                borderColor: 'red',
+                                borderWidth: 2,
+                                label: {
+                                    content: `Chosen Price: ${adjustedChosenPrice.toFixed(0)}`,
+                                    enabled: true,
+                                    position: 'right',
+                                },
+                            }],
+                        },
+                    },
+                },
+            });
+        }
+        
+        const flightData = [];
+        const flightTable = document.getElementById('flight-table');
+        const flightRows = flightTable.getElementsByTagName('tr');
+        for (let i = 1; i < flightRows.length; i++) {
+            const flightColumns = flightRows[i].getElementsByTagName('td');
+            const flightPrice = parseFloat(flightColumns[6].innerText);
+            flightData.push({ Price: flightPrice });
+        }
+        
+        const chosenFlightPrice = Math.min(...flightData.map(item => item.Price));
+        generateFlightPriceHistogram(flightData, 'flight-prices-chart', chosenFlightPrice);        
+    </script>
+    <script>
+
+        // Function to Generate Hotels Histogram
+
+        function generateHotelPriceHistogram(data, chartId, chosenPrice) {
+            const bucketSize = 40;
+            const minPrice = Math.min(...data.map(item => item.Price));
+            const maxPrice = Math.max(...data.map(item => item.Price));
+            const bucketCounts = new Array(Math.ceil((maxPrice - minPrice) / bucketSize)).fill(0);
+        
+            data.forEach(item => {
+                const bucketIndex = Math.ceil((item.Price - minPrice) / bucketSize); // Modified line
+                bucketCounts[bucketIndex]++;
+            });
+    
+            const labels = bucketCounts.map((count, index) => {
+                const bucketStart = minPrice + index * bucketSize;
+                const bucketEnd = bucketStart + bucketSize;
+                return `${bucketStart.toFixed(0)} - ${bucketEnd.toFixed(0)}`;
+            });
+    
+            const ctx = document.getElementById(chartId).getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Price',
+                        data: bucketCounts,
+                        backgroundColor: bucketCounts.map((count, index) => {
+                            const bucketStart = minPrice + index * bucketSize;
+                            const bucketEnd = bucketStart + bucketSize;
+                            if (chosenPrice >= bucketStart && chosenPrice <= bucketEnd) {
+                                return 'rgba(255, 0, 0, 0.7)';
+                            } else {
+                                return 'rgba(0, 0, 0, 0.7)';
+                            }
+                        }),
+                        borderColor: 'black',
+                        borderWidth: 1,
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: Math.max(...bucketCounts) * 1.1,
+                        },
+                    },
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        annotation: {
+                            annotations: [{
+                                type: 'line',
+                                mode: 'horizontal',
+                                scaleID: 'y',
+                                value: chosenPrice,
+                                borderColor: 'red',
+                                borderWidth: 2,
+                                label: {
+                                    content: `Chosen Price: ${chosenPrice}`,
+                                    enabled: true,
+                                    position: 'right'
+                                }
+                            }]
+                        }
+                    }
+                }
+            });
+        }
+
+        const hotelData = [];
+        const hotelTable = document.getElementById('hotel-table');
+        const hotelRows = hotelTable.getElementsByTagName('tr');
+        for (let i = 1; i < hotelRows.length; i++) {
+            const hotelColumns = hotelRows[i].getElementsByTagName('td');
+            const hotelPrice = parseFloat(hotelColumns[4].innerText);
+            hotelData.push({ Price: hotelPrice });
+        }
+    
+        const chosenHotelPrice = Math.min(...hotelData.map(item => item.Price));
+        generateHotelPriceHistogram(hotelData, 'hotel-prices-chart', chosenHotelPrice);
+    </script>
+    <script>
+
+        // Script to generate Histograms for the Cheapest / Medium and Expensive Prices for Flights and Hotels
+
+        const mediumFlightData = [];
+        const mediumHotelData = [];
+        {% if not medium_flight.empty and not medium_priced_hotel.empty %}
+        const mediumFlightTable = document.getElementById('flight-table');
+        const mediumHotelTable = document.getElementById('hotel-table');
+        const mediumFlightRows = mediumFlightTable.getElementsByTagName('tr');
+        const mediumHotelRows = mediumHotelTable.getElementsByTagName('tr');
+      
+        for (let i = 1; i < mediumFlightRows.length; i++) {
+          const flightColumns = mediumFlightRows[i].getElementsByTagName('td');
+          const flightPrice = parseFloat(flightColumns[6].innerText);
+          mediumFlightData.push({ Price: flightPrice });
+        }
+      
+        for (let i = 1; i < mediumHotelRows.length; i++) {
+          const hotelColumns = mediumHotelRows[i].getElementsByTagName('td');
+          const hotelPrice = parseFloat(hotelColumns[4].innerText);
+          mediumHotelData.push({ Price: hotelPrice });
+        }
+      
+        const mediumFlightChosenPrice = data => {
+          const flightPrices = data.map(item => item.Price);
+          const sortedFlightPrices = flightPrices.sort((a, b) => a - b);
+          const mediumIndex = Math.floor(sortedFlightPrices.length / 2);
+          return sortedFlightPrices[mediumIndex];
+        };
+      
+        const mediumHotelChosenPrice = data => {
+          const hotelPrices = data.map(item => item.Price);
+          const sortedHotelPrices = hotelPrices.sort((a, b) => a - b);
+          const mediumIndex = Math.floor(sortedHotelPrices.length / 2);
+          return sortedHotelPrices[mediumIndex];
+        };
+      
+        const chosenMediumFlightPrice = mediumFlightChosenPrice(mediumFlightData);
+        const chosenMediumHotelPrice = mediumHotelChosenPrice(mediumHotelData);
+      
+        generateFlightPriceHistogram(mediumFlightData, 'medium-flight-prices-chart', chosenMediumFlightPrice);
+        generateHotelPriceHistogram(mediumHotelData, 'medium-hotel-prices-chart', chosenMediumHotelPrice);
+      
+        {% endif %}
+    
+        const expensiveFlightData = [];
+        const expensiveHotelData = [];
+        {% if not expensive_flight.empty and not most_expensive_hotel.empty %}
+        const expensiveFlightTable = document.getElementById('flight-table');
+        const expensiveHotelTable = document.getElementById('hotel-table');
+        const expensiveFlightRows = expensiveFlightTable.getElementsByTagName('tr');
+        const expensiveHotelRows = expensiveHotelTable.getElementsByTagName('tr');
+    
+        for (let i = 1; i < expensiveFlightRows.length; i++) {
+            const flightColumns = expensiveFlightRows[i].getElementsByTagName('td');
+            const flightPrice = parseFloat(flightColumns[6].innerText);
+            expensiveFlightData.push({ Price: flightPrice });
+        }
+    
+        for (let i = 1; i < expensiveHotelRows.length; i++) {
+            const hotelColumns = expensiveHotelRows[i].getElementsByTagName('td');
+            const hotelPrice = parseFloat(hotelColumns[4].innerText);
+            expensiveHotelData.push({ Price: hotelPrice });
+        }
+    
+        const maxExpensiveFlightPrice = Math.max(...expensiveFlightData.map(item => item.Price));
+        const maxExpensiveHotelPrice = Math.max(...expensiveHotelData.map(item => item.Price));
+
+        const chosenExpensiveFlightPrice = maxExpensiveFlightPrice;
+        const chosenExpensiveHotelPrice = maxExpensiveHotelPrice;
+
+        generateFlightPriceHistogram(expensiveFlightData, 'expensive-flight-prices-chart', chosenExpensiveFlightPrice);
+        generateHotelPriceHistogram(expensiveHotelData, 'expensive-hotel-prices-chart', chosenExpensiveHotelPrice);
+        {% endif %}
+    </script>
+</body>
+</html>
