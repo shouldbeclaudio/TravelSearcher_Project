@@ -590,77 +590,79 @@
         generateFlightPriceHistogram(flightData, 'flight-prices-chart', chosenFlightPrice);        
     </script>
     <script>
-
-        // Function to Generate Hotels Histogram
-
-        function generateHotelPriceHistogram(data, chartId, chosenPrice) {
-            const bucketSize = 40;
-            const minPrice = Math.min(...data.map(item => item.Price));
-            const maxPrice = Math.max(...data.map(item => item.Price));
-            const bucketCounts = new Array(Math.ceil((maxPrice - minPrice) / bucketSize)).fill(0);
-        
-            data.forEach(item => {
-                const bucketIndex = Math.ceil((item.Price - minPrice) / bucketSize); // Modified line
-                bucketCounts[bucketIndex]++;
-            });
     
-            const labels = bucketCounts.map((count, index) => {
-                const bucketStart = minPrice + index * bucketSize;
-                const bucketEnd = bucketStart + bucketSize;
-                return `${bucketStart.toFixed(0)} - ${bucketEnd.toFixed(0)}`;
-            });
+    // Function to Generate Hotels Histogram
     
-            const ctx = document.getElementById(chartId).getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Price',
-                        data: bucketCounts,
-                        backgroundColor: bucketCounts.map((count, index) => {
-                            const bucketStart = minPrice + index * bucketSize;
-                            const bucketEnd = bucketStart + bucketSize;
-                            if (chosenPrice >= bucketStart && chosenPrice <= bucketEnd) {
-                                return 'rgba(255, 0, 0, 0.7)';
-                            } else {
-                                return 'rgba(0, 0, 0, 0.7)';
-                            }
-                        }),
-                        borderColor: 'black',
-                        borderWidth: 1,
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            suggestedMax: Math.max(...bucketCounts) * 1.1,
-                        },
-                    },
-                    plugins: {
-                        legend: {
-                            display: false,
-                        },
-                        annotation: {
-                            annotations: [{
-                                type: 'line',
-                                mode: 'horizontal',
-                                scaleID: 'y',
-                                value: chosenPrice,
-                                borderColor: 'red',
-                                borderWidth: 2,
-                                label: {
-                                    content: `Chosen Price: ${chosenPrice}`,
-                                    enabled: true,
-                                    position: 'right'
-                                }
-                            }]
+    function generateHotelPriceHistogram(data, chartId, chosenPrice) {
+        const bucketSize = 30;
+        const minPrice = Math.min(...data.map(item => item.Price));
+        const maxPrice = Math.max(...data.map(item => item.Price));
+        const bucketCounts = new Array(Math.ceil((maxPrice - minPrice) / bucketSize)).fill(0);
+
+        data.forEach(item => {
+            const bucketIndex = Math.ceil((item.Price - minPrice) / bucketSize); // Modified line
+            bucketCounts[bucketIndex]++;
+        });
+
+        const labels = bucketCounts.map((count, index) => {
+            const bucketStart = minPrice + index * bucketSize;
+            const bucketEnd = bucketStart + bucketSize;
+            return `${bucketStart.toFixed(0)} - ${bucketEnd.toFixed(0)}`;
+        });
+
+        const ctx = document.getElementById(chartId).getContext('2d');
+        const chosenBucketIndex = Math.floor((chosenPrice - minPrice) / bucketSize); // Updated line
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Price',
+                    data: bucketCounts,
+                    backgroundColor: bucketCounts.map((count, index) => {
+                        const bucketStart = minPrice + index * bucketSize;
+                        const bucketEnd = bucketStart + bucketSize;
+                        if (chosenPrice >= bucketStart && chosenPrice <= bucketEnd) {
+                            return 'rgba(255, 0, 0, 0.7)';
+                        } else {
+                            return 'rgba(0, 0, 0, 0.7)';
                         }
+                    }),
+                    borderColor: 'black',
+                    borderWidth: 1,
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        suggestedMax: Math.max(...bucketCounts) * 1.1,
+                    },
+                },
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                    annotation: {
+                        annotations: [{
+                            type: 'line',
+                            mode: 'horizontal',
+                            scaleID: 'y',
+                            value: chosenPrice,
+                            borderColor: 'red',
+                            borderWidth: 2,
+                            label: {
+                                content: `Chosen Price: ${chosenPrice}`,
+                                enabled: true,
+                                position: 'right'
+                            }
+                        }]
                     }
                 }
-            });
-        }
+            }
+        });
+    }
 
         const hotelData = [];
         const hotelTable = document.getElementById('hotel-table');
