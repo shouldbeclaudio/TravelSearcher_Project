@@ -7,10 +7,10 @@
 - app.py
 - results.html
 
-## Process 01
+## Process #1
 
 <details>
-<summary><h2>def search_city</h2></summary>
+<summary><h2>search_city</h2></summary>
 
   - In function city_name, i made a API connection to retrieve the IATA airport codes to be able to search for city names to merge
     with hotel search and make a unique search by city name
@@ -63,7 +63,7 @@
 </details>
 
 <details>
-<summary><h2>def search_flights</h2></summary>
+<summary><h2>search_flights</h2></summary>
 
    - In function search_flights, i made a API connection and made some setup's for flights search:
 
@@ -178,7 +178,7 @@
 </details>
 
 <details>
-<summary><h2>def search_hotels</h2></summary>
+<summary><h2>search_hotels</h2></summary>
 
    - In function search_hotels, i made a API connection and made some setup's for hotels search:
 
@@ -236,7 +236,7 @@
 
 </details>
 
-## Process 02
+## Process #2
 
 <details>
 <summary><h2>results.html</h2></summary>
@@ -461,6 +461,16 @@
          generateFlightPriceHistogram(flightData, 'flight-prices-chart', chosenFlightPrice); 
 
  
+</details>
+
+<details>
+<summary><h2>App Deploy</h2></summary>
+
+- Terminal:
+  
+          ~ % cd Project
+          ~ % python app.py
+
 </details>
 
 <details>
