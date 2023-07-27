@@ -474,9 +474,10 @@
 <details>
 <summary><h2>Presentation</h2></summary>
 
-![1](https://github.com/shouldbeclaudio/TravelSearcher_Project/assets/44953699/8f52c0d8-ffbe-4bb1-9ab3-88a9e08bfd3b)
-![2](https://github.com/shouldbeclaudio/TravelSearcher_Project/assets/44953699/d473d13a-0d89-4572-8226-a0ae281e58ef)
-![3](https://github.com/shouldbeclaudio/TravelSearcher_Project/assets/44953699/e889c84f-bb5f-4bbf-b84b-4d99bbfe3c09)
-![4](https://github.com/shouldbeclaudio/TravelSearcher_Project/assets/44953699/bfeb53b4-d019-4d69-8375-44dcfb9f0b60)
+![1](https://github.com/shouldbeclaudio/TravelSearcher_Project/assets/44953699/7e0912c2-fa8c-402f-a628-3f648ec83ace)
+![2](https://github.com/shouldbeclaudio/TravelSearcher_Project/assets/44953699/7f395a70-2a97-4c4d-ba6c-7b2d8d4d0605)
+![3](https://github.com/shouldbeclaudio/TravelSearcher_Project/assets/44953699/c868c22c-738d-4744-ab65-6058024b0a50)
+![4](https://github.com/shouldbeclaudio/TravelSearcher_Project/assets/44953699/608dc442-d595-4acc-85c9-5debfc5bde3a)
+![5](https://github.com/shouldbeclaudio/TravelSearcher_Project/assets/44953699/b7669edb-e177-42c5-b083-a857cbb01e38)
 
 </details>
