@@ -74,8 +74,13 @@
         h1 {
             text-align: center;
             margin-bottom: 20px;
+            margin-top: 50px;
         }
         
+        h2 {
+            margin-top: 50px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -108,7 +113,7 @@
 
 .return-button {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 50px;
 }
 
 .return-link {
@@ -121,6 +126,7 @@
     cursor: pointer;
     font-size: 16px;
     text-decoration: none;
+    margin-top: 50px;
 }
 
 .return-link:hover {
@@ -328,7 +334,7 @@
 {% endif %}
 {% if not medium_flight.empty and not medium_priced_hotel.empty %}
 <h2>Medium-Priced Flight + Hotel Combination</h2>
-<table>
+<table id="medium-flight-table">
     <thead>
         <tr>
             <th>Outbound Date</th>
@@ -353,7 +359,7 @@
     </tbody>
 </table>
 <div class="table-container">
-    <table>
+    <table id="medium-hotel-table">
         <thead>
             <tr>
                 <th>Name</th>
@@ -392,7 +398,7 @@
 {% endif %}
     {% if not expensive_flight.empty and not most_expensive_hotel.empty %}
     <h2>Expensive Flight + Hotel Combination</h2>
-    <table>
+    <table id="expensive-flight-table"> 
         <thead>
             <tr>
                 <th>Outbound Date</th>
@@ -417,7 +423,7 @@
         </tbody>
     </table>
     <div class="table-container">
-        <table>
+        <table id="expensive-hotel-table">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -597,6 +603,7 @@
         const bucketSize = 30;
         const minPrice = Math.min(...data.map(item => item.Price));
         const maxPrice = Math.max(...data.map(item => item.Price));
+    
         const bucketCounts = new Array(Math.ceil((maxPrice - minPrice) / bucketSize)).fill(0);
 
         data.forEach(item => {
@@ -699,24 +706,20 @@
           const hotelPrice = parseFloat(hotelColumns[4].innerText);
           mediumHotelData.push({ Price: hotelPrice });
         }
+    
+        const mediumFlightTablePrice = document.getElementById('medium-flight-table');
+        const mediumFlightRowsPrice = mediumFlightTablePrice.getElementsByTagName('tr');
+        const flightColumnMediumPrice = mediumFlightRowsPrice[1].getElementsByTagName('td');
+        const flightChosenMediumPrice = parseFloat(flightColumnMediumPrice[6].innerText);
+
+        const mediumHotelTablePrice = document.getElementById('medium-hotel-table');
+        const mediumHotelRowsPrice = mediumHotelTablePrice.getElementsByTagName('tr');
+        const hotelColumnMediumPrice = mediumHotelRowsPrice[1].getElementsByTagName('td');
+        const hotelChosenMediumPrice = parseFloat(hotelColumnMediumPrice[4].innerText);
       
-        const mediumFlightChosenPrice = data => {
-          const flightPrices = data.map(item => item.Price);
-          const sortedFlightPrices = flightPrices.sort((a, b) => a - b);
-          const mediumIndex = Math.floor(sortedFlightPrices.length / 2);
-          return sortedFlightPrices[mediumIndex];
-        };
-      
-        const mediumHotelChosenPrice = data => {
-          const hotelPrices = data.map(item => item.Price);
-          const sortedHotelPrices = hotelPrices.sort((a, b) => a - b);
-          const mediumIndex = Math.floor(sortedHotelPrices.length / 2);
-          return sortedHotelPrices[mediumIndex];
-        };
-      
-        const chosenMediumFlightPrice = mediumFlightChosenPrice(mediumFlightData);
-        const chosenMediumHotelPrice = mediumHotelChosenPrice(mediumHotelData);
-      
+        const chosenMediumFlightPrice = flightChosenMediumPrice;
+        const chosenMediumHotelPrice = hotelChosenMediumPrice;
+        
         generateFlightPriceHistogram(mediumFlightData, 'medium-flight-prices-chart', chosenMediumFlightPrice);
         generateHotelPriceHistogram(mediumHotelData, 'medium-hotel-prices-chart', chosenMediumHotelPrice);
       
@@ -741,15 +744,22 @@
             const hotelPrice = parseFloat(hotelColumns[4].innerText);
             expensiveHotelData.push({ Price: hotelPrice });
         }
-    
-        const maxExpensiveFlightPrice = Math.max(...expensiveFlightData.map(item => item.Price));
-        const maxExpensiveHotelPrice = Math.max(...expensiveHotelData.map(item => item.Price));
 
-        const chosenExpensiveFlightPrice = maxExpensiveFlightPrice;
-        const chosenExpensiveHotelPrice = maxExpensiveHotelPrice;
+        const expensiveFlightTablePrice = document.getElementById('expensive-flight-table');
+        const expensiveFlightRowsPrice = expensiveFlightTablePrice.getElementsByTagName('tr');
+        const flightColumnPrice = expensiveFlightRowsPrice[1].getElementsByTagName('td');
+        const flightChosenPrice = parseFloat(flightColumnPrice[6].innerText);
 
-        generateFlightPriceHistogram(expensiveFlightData, 'expensive-flight-prices-chart', chosenExpensiveFlightPrice);
+        const expensiveHotelTablePrice = document.getElementById('expensive-hotel-table');
+        const expensiveHotelRowsPrice = expensiveHotelTablePrice.getElementsByTagName('tr');
+        const hotelColumnPrice = expensiveHotelRowsPrice[1].getElementsByTagName('td');
+        const hotelChosenPrice = parseFloat(hotelColumnPrice[4].innerText);
+
+        const chosenExpensiveFlightPrice = flightChosenPrice;
+        const chosenExpensiveHotelPrice = hotelChosenPrice;
+ 
         generateHotelPriceHistogram(expensiveHotelData, 'expensive-hotel-prices-chart', chosenExpensiveHotelPrice);
+        generateFlightPriceHistogram(expensiveFlightData, 'expensive-flight-prices-chart', chosenExpensiveFlightPrice);
         {% endif %}
     </script>
 </body>
