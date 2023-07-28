@@ -103,14 +103,18 @@ def search():
         sorted_combinations = all_combinations.sort_values('total_price', ignore_index=True)
         
         medium_index = len(sorted_combinations) // 2
-        medium_combination = sorted_combinations.iloc[[medium_index]]
-        
-        while medium_combination['total_price'].iloc[0] > max_price_numeric:
-            medium_index += 1
-            if medium_index >= len(sorted_combinations):
-               break
 
-            medium_combination = sorted_combinations.iloc[[medium_index]]
+        if not sorted_combinations.empty and 0 <= medium_index < len(sorted_combinations):
+           medium_combination = sorted_combinations.iloc[[medium_index]]
+        else:
+           medium_combination = None
+
+        while not medium_combination.empty and medium_index < len(sorted_combinations) and medium_combination['total_price'].iloc[0] > max_price_numeric:
+              medium_index += 1
+              if medium_index >= len(sorted_combinations):
+                 break
+              medium_combination = sorted_combinations.iloc[[medium_index]]
+
         
         medium_flight = medium_combination[['Outbound Date', 'Outbound Origin', 'Outbound Destination',
                                             'Inbound Date', 'Inbound Origin', 'Inbound Destination', 'Price']]

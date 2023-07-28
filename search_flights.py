@@ -34,6 +34,16 @@ def search_city(city_name):
 def search_flights(departure_date, return_date, origin, destination, adults, min_price, max_price, limit=5):
     origin_entity_id, origin_iata = search_city(origin)
     destination_entity_id, destination_iata = search_city(destination)
+    
+    if min_price:
+        min_price = float(min_price)
+    else:
+        min_price = float('-inf')
+
+    if max_price:
+        max_price = float(max_price)
+    else:
+        max_price = float('-inf')
 
     if origin_entity_id is None:
         print(f"Origin city '{origin}' not found.")
