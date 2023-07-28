@@ -487,7 +487,7 @@
 ![1](https://github.com/shouldbeclaudio/TravelSearcher_Project/assets/44953699/7e0912c2-fa8c-402f-a628-3f648ec83ace)
 ![2](https://github.com/shouldbeclaudio/TravelSearcher_Project/assets/44953699/7f395a70-2a97-4c4d-ba6c-7b2d8d4d0605)
 ![3](https://github.com/shouldbeclaudio/TravelSearcher_Project/assets/44953699/c868c22c-738d-4744-ab65-6058024b0a50)
-![4](https://github.com/shouldbeclaudio/TravelSearcher_Project/assets/44953699/608dc442-d595-4acc-85c9-5debfc5bde3a)
+![4](https://github.com/shouldbeclaudio/TravelSearcher_Project/assets/44953699/57ff3a76-1904-4f00-a507-0c220498f043)
 ![5](https://github.com/shouldbeclaudio/TravelSearcher_Project/assets/44953699/b7669edb-e177-42c5-b083-a857cbb01e38)
 
 </details>
